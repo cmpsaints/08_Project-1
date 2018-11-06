@@ -2,6 +2,10 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <title>briX</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     <title>Gamedev Canvas Workshop</title>
     <style>
     	* { padding: 0; margin: 0; }
@@ -10,131 +14,55 @@
 
 </head>
 <body>
+  
+    <header> 
+        <h1> briX </h1>
+    </header> 
 
-<canvas id="myCanvas" width="480" height="320"></canvas>
+    <!--Modal: Get user nick before playing game. Hi score will be stored under their nick.-->
+    <!--Add to JS file: $('#myModal').modal(options)-->
+    <div class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create a nickname:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type = "text" id = "user-nickname" placeholder = "Nickname">  
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Enter</button>
+            </div>
+            </div>
+        </div>
+    </div>
 
-<script>
-
-  //DEFINE VARIABLES
-  var canvas = document.getElementById("myCanvas");
-  var ctx = canvas.getContext("2d");
-
-  var x = canvas.width/2;
-  var y = canvas.height-30;
-  var dx = 2;
-  var dy = -2;
-
-  var ballRadius = 10;
-
-  var paddleHeight = 10;
-  var paddleWidth = 75;
-  var paddleX = (canvas.width-paddleWidth)/2;
-
-  var rightPressed = false;
-  var leftPressed = false;
-
-
-  //DEFINE FUNCTIONS
-  function drawBall() {
-      ctx.beginPath();
-      ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-      ctx.fillStyle = "#0095DD";
-      ctx.fill();
-      ctx.closePath();
-  }
-
-  function drawPaddle() {
-    ctx.beginPath();
-    ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "#0095DD";
-    ctx.fill();
-    ctx.closePath();
-  }
-
-  function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawBall();
-      drawPaddle();
-
-      //bounces left or right
-      if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
-        dx = -dx;
-      }
-
-      //bounces top or bottom
-      if(y + dy < ballRadius) {
-          dy = -dy;
-      } else if(y + dy > canvas.height) {
-        //Paddle hit detection
-          if(x > paddleX && x < paddleX + paddleWidth) {
-              dy = -dy;
-          }
-          //Hits bottom wall - lose condition
-          else {
-              alert("GAME OVER");
-              document.location.reload();
-          }
-      }
-      x += dx;
-      y += dy;
-
-      if(rightPressed && paddleX < canvas.width-paddleWidth) {
-        paddleX += 7;
-      }
-      else if(leftPressed && paddleX > 0) {
-        paddleX -= 7;
-      }
-  }
-
-  //EVENT LISTENERS
-  document.addEventListener("keydown", keyDownHandler, false);
-  document.addEventListener("keyup", keyUpHandler, false);
-
-  //Functions to execute when keys pressed
-  function keyDownHandler(e) {
-    if(e.keyCode == 39) {
-        rightPressed = true;
-    }
-    else if(e.keyCode == 37) {
-        leftPressed = true;
-    }
-  }
-
-  function keyUpHandler(e) {
-      if(e.keyCode == 39) {
-          rightPressed = false;
-      }
-      else if(e.keyCode == 37) {
-          leftPressed = false;
-      }
-  }
-
-  //Ball moves every 10 milliseconds
-  setInterval(draw, 10);
+    <div id = "timer"> Time: </div>
+    <canvas id="myCanvas" width="900" height="700"></canvas>
+    <div id = "hi-score"> High Score </div>
+    <div id = "instructions"> Instructions: Use left and right arrow keys to move paddle. </div>
+    <div id = "music-controls"> Music?  </div>
+    <div id = "game-over"> 
+        <h1> GAME OVER </h1> 
+        <img src = ""> <!--GIF-->
+        <div id = "display-score"> Your Score: </div> 
+        <div id = "high-scores"> High Scores:
+            <ol class = "list-group"> 
+                <li class="list-group-item"> Name, Score </li>
+                <li class="list-group-item"> Name, Score </li>
+                <li class="list-group-item"> Name, Score </li>
+                <li class="list-group-item"> Name, Score </li>
+                <li class="list-group-item"> Name, Score </li>
+            </ol> 
+        </div>
+        <button id = "Replay"> Replay </button> 
+        <button id = "Restart"> Restart </button>
+    </div> 
 
 
-
-  // ctx.beginPath();
-  // ctx.rect(20, 40, 50, 50);
-  // ctx.fillStyle = "#FF0000";
-  // ctx.fill();
-  // ctx.closePath();
-  //
-  // ctx.beginPath();
-  // ctx.arc(240, 160, 20, 0, Math.PI*2, false);
-  // ctx.fillStyle = "green";
-  // ctx.fill();
-  // ctx.closePath();
-  //
-  // ctx.beginPath();
-  // ctx.rect(160, 10, 100, 40);
-  // ctx.strokeStyle = "rgba(0, 0, 255, 0.5)";
-  // ctx.stroke();
-  // ctx.closePath();
-
-
-
-</script>
 
 </body>
 </html>

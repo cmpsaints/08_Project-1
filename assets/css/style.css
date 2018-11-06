@@ -1,0 +1,14 @@
+body {
+    text-align: center;
+}
+
+/* #game-over {
+    display: none;
+} */
+
+.list-group-item {
+    display: list-item;
+}
+
+/* $("#game-over").hide(); 
+.show(); include in JS file*/

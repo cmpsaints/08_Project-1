@@ -2,14 +2,63 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
+    <title>briX</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <style>
+    	* { padding: 0; margin: 0; }
+    	canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+
 </head>
 <body>
-    <h1> test</h1>
+    <header> 
+        <h1> briX </h1>
+    </header> 
+
+    <!--Modal: Get user nick before playing game. Hi score will be stored under their nick.-->
+    <!--Add to JS file: $('#myModal').modal(options)-->
+    <div class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create a nickname:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type = "text" id = "user-nickname" placeholder = "Nickname">  
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Enter</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div id = "timer"> Time: </div>
+    <canvas id="myCanvas" width="900" height="700"></canvas>
+    <div id = "hi-score"> High Score </div>
+    <div id = "instructions"> Instructions: Use left and right arrow keys to move paddle. </div>
+    <div id = "music-controls"> Music?  </div>
+    <div id = "game-over"> 
+        <h1> GAME OVER </h1> 
+        <img src = ""> <!--GIF-->
+        <div id = "display-score"> Your Score: </div> 
+        <div id = "high-scores"> High Scores:
+            <ol class = "list-group"> 
+                <li class="list-group-item"> Name, Score </li>
+                <li class="list-group-item"> Name, Score </li>
+                <li class="list-group-item"> Name, Score </li>
+                <li class="list-group-item"> Name, Score </li>
+                <li class="list-group-item"> Name, Score </li>
+            </ol> 
+        </div>
+        <button id = "Replay"> Replay </button> 
+        <button id = "Restart"> Restart </button>
+    </div> 
+
 </body>
 </html>
-

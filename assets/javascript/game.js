@@ -13,13 +13,13 @@ $(document).ready(function(){
  });
   });
  
-  $('#Restart').click(function() {
+  $('#restart').click(function() {
      location.reload();
  });
  
- $('#Replay').click(function() {
+ $('#replay').click(function() {
      $("#gameover").hide();
- $("#displaygame").show();
+    $("#displaygame").show();
  });
  
  

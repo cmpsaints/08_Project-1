@@ -1,6 +1,7 @@
 //Initialize modal on page load to create nickname
 
 document.addEventListener('DOMContentLoaded', function () {
+    $("#game-over").hide();
     var Modalelem = document.querySelector('.modal');
     var instance = M.Modal.init(Modalelem);
     instance.open();
@@ -135,9 +136,15 @@ function draw() {
         }
         else {
             lives--;
+            //LOSE CONDITION
             if (lives === 0) {
-                alert("GAME OVER");
-                document.location.reload();
+              //Hide "display-game" section
+             // $("#display-game").hide();
+             $("#display-game").css("display","none");
+              //Show "game-over" section
+              // $("#game-over").show();
+              $("#game-over").css("display", "contents");
+                // document.location.reload();
             }
             else {
                 x = canvas.width / 2;

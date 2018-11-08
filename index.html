@@ -17,31 +17,55 @@
 </head>
 <body>
 
-  <header>
-      <h1> briX </h1>
-  </header>
+   <header>
+       <h1> briX </h1>
+   </header>
 
-  <!-- Modal Structure to get username -->
-  <div id="modal1" class="modal">
-    <div class="modal-content">
-        <h4>Welcome to briX!</h4>
-        <h5 >Create a nickname:</h5>
-      <div class="row">
-        <form class="col s12">
-          <div class="row">
-            <div class="input-field col s12">
-              <input id="nicknameinput" type="text" class="validate">
-              <label for="nicknameinput">Nickname</label>
-            </div>
-          </div>       
-                    
-        </form>
+ <!-- Modal Structure to get username -->
+ <!--<div id="modal1" class="modal">
+  <form class="col s12">
+   <div class="modal-content">
+     <h4>Welcome to briX!</h4>
+     <h5 >Create a nickname:</h5>
+   </div>
+     <div class="row">
+        <div class="input-field col s6">
+          <input placeholder="Enter Nickname" id="first_name" type="text" class="validate">
+          <label for="first_name">Nickname</label>
+        </div>
       </div>
-    </div>
-    <div class="modal-footer">
-      <a class=" modal-action modal-close waves-effect waves-green btn-flat" id="submitmodal">Submit</a>
-    </div>
-  </div>
+      <div class="modal-footer">
+        <p class = "center-align">
+          <button  id = "submit-button" class="modal-close btn waves-effect waves-light" type="submit" name="action">ENTER
+          </button>
+       </p>
+     </div>
+  </form>
+  </div>  -->
+
+  
+    
+      <!-- Modal Structure -->
+      <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Welcome to briX!</h4>
+            <h5 >Create a nickname:</h5>
+          <div class="row">
+            <form class="col s12">
+              <div class="row">
+                <div class="input-field col s12">
+                  <input id="nicknameinput" type="text" class="validate">
+                  <label for="nicknameinput">Nickname</label>
+                </div>
+              </div>       
+                       
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a class=" modal-action modal-close waves-effect waves-green btn-flat" id="submitmodal">Submit</a>
+        </div>
+      </div>
     
      
 
@@ -82,6 +106,7 @@
 
 </section>
 
-<script src="game.js "></script>
+<script src="assets/javascript/game.js "></script>
+<!-- <script src="component-2.js "></script> -->
 </body>
 </html>

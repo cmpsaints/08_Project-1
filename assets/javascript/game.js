@@ -1,64 +1,34 @@
-$(document).ready(function () {
+$(document).ready(function(){
     $('#modal1').modal();
-    $('#modal1').modal('open');
+    $('#modal1').modal('open'); 
     $("#gameover").hide();
-    // $("#displaygame").hide();
-
-
-    $("#submitmodal").click(function () {
-        var nickname = $('#nicknameinput').val()
-        // MO timer function
-        timerFunc();
-    });
-});
-
-// MO Configure and Initialize Database 
-var config = {
-    apiKey: "AIzaSyAXHWAAt4ZCoivRhnu0140RJYcB7eD-KCE",
-    authDomain: "game-project-e5caa.firebaseapp.com",
-    databaseURL: "https://game-project-e5caa.firebaseio.com",
-    projectId: "game-project-e5caa",
-    storageBucket: "",
-    messagingSenderId: "116338671963"
-};
-
-firebase.initializeApp(config);
-database = firebase.database();
-var resultRef = database.ref("gameResult");
-
-// MO Initialize Music Api
-var tag = document.createElement('script');
-var muteAudio = document.getElementById('player');
-
-tag.src = "https://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-var list = ["vNZnKsB9pVs", "zyluU2OpqDA", "QwdbFNGCkLw"];
-var videoIdValue = get_random(list);
-var player;
-function onYouTubeIframeAPIReady() {
-    player = new YT.Player('player', {
-        height: '50',
-        width: '100',
-        videoId: videoIdValue,
-        playerVars: '',
-        events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-        }
-    });
-}
-var done = false;
-
-// MO declare array for gif values
-var win = ["happy", "win", "success"];
-var lost = ["sad", "lost", "fail"];
-
-// JavaScript for referencing 2D context in Canvas drawing area
-var canvas = document.getElementById("myCanvas");
-var ctx = canvas.getContext("2d");
-
-// Declaring variables (and variables are given initial values)
+   // $("#displaygame").hide();
+ 
+ 
+    $("#submitmodal").click(function(){
+        var nickname=$('#nicknameinput').val()
+ 
+  
+   
+ });
+  });
+ 
+  $('#Restart').click(function() {
+     location.reload();
+ });
+ 
+ $('#Replay').click(function() {
+     $("#gameover").hide();
+ $("#displaygame").show();
+ });
+ 
+ 
+ 
+ // JavaScript for referencing 2D context in Canvas drawing area
+ var canvas = document.getElementById("myCanvas");
+ var ctx = canvas.getContext("2d");
+ 
+ // Declaring variables (and variables are given initial values)
 
 const startMsgWidth = canvas.width / 2;
 const startMsgHeight = canvas.height / 4;
@@ -256,266 +226,96 @@ function playGame() {
     //     displayStartScreen();
     // }
     // else {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    drawBall();
-    drawBorder();
-    drawPaddle();
+        drawBall();
+        drawBorder();
+        drawPaddle();
 
-    // moving horiz GOAL opening back & forth
-    if (horizBorderWidthLeft <= vertBorderWidth || horizBorderWidthRight <= vertBorderWidth) {
-        horizBorderDx = -horizBorderDx;
-    }
-    horizBorderWidthLeft += horizBorderDx;
-    horizBorderWidthRight = canvas.width - horizBorderWidthLeft - horizOpeningWidth;
-
-    // detect ball collision with VERTical walls
-    if (x + dx < borderThickness + ballRadius / 2 || x + dx > canvas.width - borderThickness - ballRadius / 2) {
-        dx = -dx;
-    }
-
-    // detect ball passing through GOAL opening
-    if (x > horizBorderWidthLeft + ballRadius / 2 && x < horizBorderWidthLeft + horizOpeningWidth - ballRadius / 2) {
-        if (y + dy < borderThickness - ballRadius / 2) {
-            displayYouWin();
-            return;
-            // alert("YOU WIN");
-            // document.location.reload();
+        // moving horiz GOAL opening back & forth
+        if (horizBorderWidthLeft <= vertBorderWidth || horizBorderWidthRight <= vertBorderWidth) {
+            horizBorderDx = -horizBorderDx;
         }
-    }   // detect ball collision with TOP HORIZontal wall
-    else if (y + dy < borderThickness + ballRadius / 2 && dy < 0) {
-        dy = -dy;
-    }
-    // detect ball collision with PADDLE
-    if (x > paddleX && x < paddleX + paddleWidth) {
-        if (y + dy > canvas.height - paddleHeight - ballRadius / 2 && dy > 0) {
+        horizBorderWidthLeft += horizBorderDx;
+        horizBorderWidthRight = canvas.width - horizBorderWidthLeft - horizOpeningWidth;
+
+        // detect ball collision with VERTical walls
+        if (x + dx < borderThickness + ballRadius / 2 || x + dx > canvas.width - borderThickness - ballRadius / 2) {
+            dx = -dx;
+        }
+
+        // detect ball passing through GOAL opening
+        if (x > horizBorderWidthLeft + ballRadius / 2 && x < horizBorderWidthLeft + horizOpeningWidth - ballRadius / 2) {
+            if (y + dy < borderThickness - ballRadius / 2) {
+                displayYouWin();
+                return;
+                // alert("YOU WIN");
+                // document.location.reload();
+            }
+        }   // detect ball collision with TOP HORIZontal wall
+        else if (y + dy < borderThickness + ballRadius / 2 && dy < 0) {
             dy = -dy;
         }
-    }   // detect ball passing by PADDLE, thus player loses a life
-    else if (y + dy > canvas.height) {
-        // MO Save Player and high Score to Local storage 
-        if (!userFound()) {
-            addLocalStoarge();
-        }
-        // MO save data to firebase Database
-        saveDate();
-        displaySavedData();
-        // MO display gif
-        var searchGif = get_random(lost);
-        displayGif(searchGif);
-        //Hide "display-game" section
-        // $("#display-game").hide();
-        $("#displaygame").css("display", "none");
-        //Show "game-over" section
-        // $("#game-over").show();
-        $("#gameover").css("display", "contents");
-    }
-
-    // // ..... detect ball collision with TOP horizontal wall
-    // if (y + dy < borderThickness + ballRadius) {
-    //     if (x < horizBorderWidthLeft - ballRadius || x > horizBorderWidthLeft + horizOpeningWidth + ballRadius) {
-    //         dy = -dy;
-    //     }   // ..... detect ball passing through GOAL opening
-    //     else if (y + dy < borderThickness) {
-    //         alert("YOU WIN");
-    //         document.location.reload();
-    //     }
-    // }   // ..... detect ball collision with paddle
-    // else if (y + dy > canvas.height - paddleHeight - ballRadius / 2) {
-    //     if (x > paddleX && x < paddleX + paddleWidth) {
-    //         dy = -dy;
-    //     }
-    //     // else {
-    //     //     alert("GAME OVER");
-    //     //     document.location.reload();
-    //     // }
-    // }
-    // // ..... detect ball passing by paddle, thus player loses
-    // if (y + dy > canvas.height - ballRadius / 2) {
-    //     alert("GAME OVER");
-    //     document.location.reload();
-    // }
-
-    // move paddle due to pressing L/R arrow keys
-    if (rightPressed && paddleX < canvas.width - paddleWidth) {
-        paddleX += 7;
-    }
-    else if (leftPressed && paddleX > 0) {
-        paddleX -= 7;
-    }
-
-    // increment x & y positions of ball
-    x += dx;
-    y += dy;
-
-    requestAnimationFrame(playGame);
-    // }
-}
-
-function addLocalStoarge() {
-    var player = $("#nicknameinput").val().trim();
-    var score = $("#timer").text();
-    if (localStorage.getItem('users')) {
-        logon = JSON.parse(localStorage.getItem('users'));
-    } else {
-        logon = [];
-    }
-    logon.push(player);
-    logon.push(score);
-    localStorage.setItem("users", JSON.stringify(logon));
-}
-
-// MO check if data saved to local storage
-
-function userFound() {
-    var player = $("#nicknameinput").val().trim();
-    var score = $("#timer").text();
-    var logonStorage = JSON.parse(localStorage.getItem('users'));
-    if (logonStorage === null) {
-        return false;
-    }
-    else {
-        for (var i = 0; i < logonStorage.length; i++) {
-
-            if (logonStorage[i + 1] <= score) {
-                localStorage.clear('users');
-                addLocalStoarge()
+        // detect ball collision with PADDLE
+        if (x > paddleX && x < paddleX + paddleWidth) {
+            if (y + dy > canvas.height - paddleHeight - ballRadius / 2 && dy > 0) {
+                dy = -dy;
             }
-            return true;
+        }   // detect ball passing by PADDLE, thus player loses a life
+        else if (y + dy > canvas.height) {
+            //Hide "display-game" section
+            // $("#display-game").hide();
+            $("#displaygame").css("display","none");
+            //Show "game-over" section
+            // $("#game-over").show();
+            $("#gameover").css("display", "contents");
+                // document.location.reload();
+            // displayGameOver();
+            // return;
+            // alert("GAME OVER");
+            // document.location.reload();
         }
 
-    }
+        // // ..... detect ball collision with TOP horizontal wall
+        // if (y + dy < borderThickness + ballRadius) {
+        //     if (x < horizBorderWidthLeft - ballRadius || x > horizBorderWidthLeft + horizOpeningWidth + ballRadius) {
+        //         dy = -dy;
+        //     }   // ..... detect ball passing through GOAL opening
+        //     else if (y + dy < borderThickness) {
+        //         alert("YOU WIN");
+        //         document.location.reload();
+        //     }
+        // }   // ..... detect ball collision with paddle
+        // else if (y + dy > canvas.height - paddleHeight - ballRadius / 2) {
+        //     if (x > paddleX && x < paddleX + paddleWidth) {
+        //         dy = -dy;
+        //     }
+        //     // else {
+        //     //     alert("GAME OVER");
+        //     //     document.location.reload();
+        //     // }
+        // }
+        // // ..... detect ball passing by paddle, thus player loses
+        // if (y + dy > canvas.height - ballRadius / 2) {
+        //     alert("GAME OVER");
+        //     document.location.reload();
+        // }
 
-}
-// MO function To Save Data To Firebase Database
-
-function saveDate() {
-    console.log("here")
-    var player = $("#nicknameinput").val().trim();
-    var score = $("#timer").text();
-    var newResultRef = resultRef.push();
-    var d = new Date();
-    newResultRef.set({
-        player: player,
-        score: score,
-        currtime: d.toLocaleString()
-
-    })
-}
-
-// MO function To Call Giffy API 
-
-function displayGif(searchGif) {
-    $("#gif").empty();
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-        searchGif + "&api_key=dc6zaTOxFJmzC&limit=1";
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    }).then(function (response) {
-        response.data.forEach(function (gif) {
-            var imageDiv = $("<div>");
-            var animalImage = $("<img>").attr("src", gif.images.fixed_height.url);
-            animalImage.addClass("img-responsive");
-            animalImage.addClass("img-thumbnail");
-            $("#gif").append(animalImage)
-        })
-
-    });
-}
-
-// MO Random Function
-function get_random(list) {
-    return list[Math.floor((Math.random() * list.length))];
-
-}
-
-// MO Music Fuctions
-function onPlayerStateChange(event) {
-    if (event.data == YT.PlayerState.PLAYING && !done) {
-        //  setTimeout(stopVideo, 60000;
-        done = true;
-        console.log(event);
-    }
-}
-function stopVideo() {
-    player.stopVideo();
-}
-function onPlayerReady(event) {
-    console.log(event.target);
-}
-
-function playVideo() {
-    player.playVideo();
-}
-
-function get_random(list) {
-    return list[Math.floor((Math.random() * list.length))];
-
-}
-
-// MO timer function 
-function timerFunc() {
-    $("#timer").text("");
-    var counter = 0;
-    function timeIt() {
-
-        $("#timer").text(counter);
-        counter++;
-    }
-    interval = setInterval(timeIt, 1000);
-}
-
-
-// MO function retrive data from firebase database
-function displaySavedData() {
-    resultRef.on("value", getData, getErr);
-    function getData(data) {
-
-        var userdata = data.val();
-        var keys = Object.keys(userdata);
-        for (var i = 0; i < keys.length; i++) {
-            var k = keys[i];
-
-            var player = userdata[k].player;
-            var score = userdata[k].score;
-
-            $("#data-table > tbody").append("<tr><td>" + player + "</td><td>" + score + "</td><td>");
+        // move paddle due to pressing L/R arrow keys
+        if (rightPressed && paddleX < canvas.width - paddleWidth) {
+            paddleX += 7;
         }
-    }
-    function getErr(err) {
-        console.log("error");
-        console.log(err);
-    }
+        else if (leftPressed && paddleX > 0) {
+            paddleX -= 7;
+        }
+
+        // increment x & y positions of ball
+        x += dx;
+        y += dy;
+
+        requestAnimationFrame(playGame);
+    // }
 }
-
-$("#submitmodal").click(function() {
-
-});
-
-$('#Restart').click(function () {
-    location.reload();
-});
-
-$('#Replay').click(function () {
-    console.log(startScreen);
-    $("#gameover").hide();
-    $("#displaygame").show();
-    startScreen = true;
-    gameInitialize();
-});
-
-
-// MO play music
-$('#music-controls').change(function () {
-
-    if (this.checked) {
-        playVideo();
-    } else {
-        stopVideo()
-    }
-});
-draw();
 
 // setInterval(playGame, 10);
 // playGame();

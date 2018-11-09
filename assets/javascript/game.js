@@ -1,15 +1,36 @@
 $(document).ready(function(){
-    $('#modal1').modal();
-    $('#modal1').modal('open'); 
+    $("#displaygame").hide();
     $("#gameover").hide();
-   // $("#displaygame").hide();
- 
- 
-    $("#submitmodal").click(function(){
-        var nickname=$('#nicknameinput').val()
-    });
+   //$("#gameover").hide();
+  // $("#displaygame").hide();
 });
-
+    $("#submitmodal").click(function(){
+        
+        var nickname=$('#nicknameinput').val();
+        
+        if ( nickname != ""){ 
+            //alert("not empty");
+           $("#usernickname").hide();
+           $("#displaygame").show();
+       }
+    });
+       
+   
+         
+ 
+  $('#Restart').click(function() {
+    location.reload();
+ });
+ 
+ $('#Replay').click(function() {
+    console.log(startScreen);
+    $("#gameover").hide();
+    $("#displaygame").show();
+    startScreen = true;
+    gameInitialize();
+ });
+ 
+ 
  // JavaScript for referencing 2D context in Canvas drawing area
  var canvas = document.getElementById("myCanvas");
  var ctx = canvas.getContext("2d");
@@ -189,6 +210,7 @@ function gameInitialize() {
 
         window.setTimeout(playGame, 1150);
     }
+
 }
 
 document.addEventListener("keyup", spaceBar);
@@ -302,18 +324,3 @@ function playGame() {
         requestAnimationFrame(playGame);
     // }
 }
-
-$('#Restart').click(function() {
-    location.reload();
-});
-
-$('#Replay').click(function() {
-    console.log(startScreen)
-    $("#gameover").hide();
-    $("#displaygame").show();
-    startScreen = true;
-    gameInitialize();
-});
-
-// setInterval(playGame, 10);
-// playGame();

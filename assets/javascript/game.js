@@ -1,24 +1,24 @@
 $(document).ready(function(){
     $("#displaygame").hide();
     $("#gameover").hide();
-   //$("#gameover").hide();
-  // $("#displaygame").hide();
 });
     $("#submitmodal").click(function(){
         
         var nickname=$('#nicknameinput').val();
         
-        if ( nickname != ""){ 
-            //alert("not empty");
+        if ( nickname != "" && nickname.length <= 8) { 
            $("#usernickname").hide();
            $("#displaygame").show();
+       }
+       else {
+            $("#nick-error").html("You must enter a nickcname 8 characters or under.")
        }
     });
        
    
          
  
-  $('#Restart').click(function() {
+$('#Restart').click(function() {
     location.reload();
  });
  

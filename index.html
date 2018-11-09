@@ -1,107 +1,87 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <meta charset="utf-8" />
-  <title>briX</title>
-  <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-  <title>Gamedev Canvas Workshop</title>
-  <style>
-    * { padding: 0; margin: 0; }
+   <meta charset="utf-8" />
+   <title>briX</title>
+   <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+   <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+   <title>Gamedev Canvas Workshop</title>
+   <style>
+       * { padding: 0; margin: 0; }
        canvas { background: #eee; display: block; margin: 0 auto; }
    </style>
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <!-- MO Script To Initilaize Firebaes-->
-  <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+ <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-
 <body>
 
-  <header>
-    <h1> briX </h1>
-  </header>
+   <header>
+       <h1> briX </h1>
+   </header>
 
-
-  <!-- Modal Structure -->
-  <div id="modal1" class="modal">
-    <div class="modal-content">
-      <h4>Welcome to briX!</h4>
-      <h5>Create a nickname:</h5>
-      <div class="row">
-        <form class="col s12">
+      <!--<div id="modal1" class="modal"> -->
+      <section id="usernickname">
+        <div class="modal-content">
+            <h4>Welcome to briX!</h4>
+            <h5>Create a nickname:</h5>
+            <p id = "nick-error"> </p>
           <div class="row">
-            <div class="input-field col s12">
-              <input id="nicknameinput" type="text" class="validate">
-              <label for="nicknameinput">Nickname</label>
-            </div>
+            <form class="col s12">
+              <div class="row">
+                <div class="input-field col s12">
+                  <input id="nicknameinput" type="text" class="validate">
+                  <label for="nicknameinput">Nickname</label>
+                </div>
+              </div>       
+                       
+            </form>
           </div>
+        </div>
+        <div class="modal-footer">
+          <a class=" modal-action modal-close waves-effect waves-green btn-flat" id="submitmodal">Submit</a>
+        </div>
+    
+    </section>
+     
 
-        </form>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <a class=" modal-action modal-close waves-effect waves-green btn-flat" id="submitmodal">Submit</a>
-    </div>
-  </div>
-
-  <!-- MO Sound Div Hidden-->
-  <div id="player" style="display:none"></div>
-
-
-  <section id="displaygame">
-    <div id="timer"> Time: </div>
-    <canvas id="myCanvas" width="900" height="500"></canvas>
-    <div id="hi-score"> High Score </div>
+<section id="displaygame">
+   <div id = "timer"> Time: </div>
+   <canvas id="myCanvas" width="900" height="500"></canvas>
+   <div id = "hi-score"> High Score </div>
 
 
-    <div id="instructions"> Instructions: Use left and right arrow keys to move paddle. </div>
-    <form action="#">
+   <div id = "instructions"> Instructions: Use left and right arrow keys to move paddle. </div>
+   <form action="#">
       <p>
         <label>
-          <input type="checkbox" id="music-controls" />
-          <span>Mute Music</span>
+          <input type="checkbox" id="music-controls"/>
+           <span>Mute Music</span>
         </label>
       </p>
-    </form>
+   </form>
+</section>
 
-    <div id="game-over"> </div>
-  </section>
+<section id="gameover">
+       <h1> GAME OVER </h1>
+       <img src = "" id="gif"> <!--GIF-->
+       <div id = "display-score"> Your Score: </div>
+       <div id = "highscores"> High Scores:
+           <ol class = "list-group">
+               <li class="list-group-item"> Name,<span>0</span> Score<span>0</span> </li>
+               <li class="list-group-item"> Name,<span>1</span> Score<span>1</span> </li>
+               <li class="list-group-item"> Name,<span>2</span> Score <span>2</span></li>
+               <li class="list-group-item"> Name,<span>4</span> Score <span>3</span></li>
+               <li class="list-group-item"> Name,<span>5</span> Score<span> 4</span> </li>
+           </ol>
+       </div>
+       <button id = "Replay" > Replay </button>
+       <button id = "Restart"> Restart </button>
 
-  <section id="gameover">
-    <!--MO GIF-->
-    <div id="gif"> </div>
-    <h1> GAME OVER </h1>
-    <img src="" id="gif">
-    <!--GIF-->
-    <div id="display-score"> Your Score: </div>
-    <div id="high-scores"> High Scores:
+</section>
 
-      <!-- MO Table-->
-      <div>
-        <table class="table table-hover" id='data-table'>
-          <thead>
-            <tr>
-              <th>Player</th>
-              <th>Score</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <button id="Replay"> Replay </button>
-    <button id="Restart"> Restart </button>
-
-  </section>
-
-  <script src="assets/javascript/game.js "></script>
-  <!-- <script src="component-2.js "></script> -->
+<script src="assets/javascript/game.js "></script>
+<!-- <script src="component-2.js "></script> -->
 </body>
-
 </html>

@@ -12,35 +12,36 @@ firebase.initializeApp(config);
 database = firebase.database();
 var resultRef = database.ref("gameResult");
 
-$(document).ready(function(){
+$(document).ready(function () {
     $("#displaygame").hide();
     $("#gameover").hide();
 });
 
-$("#submitmodal").click(function(){
-    
-    var nickname=$('#nicknameinput').val();
-    
-    if ( nickname != "" && nickname.length <= 8) { 
+$("#submitmodal").click(function () {
+
+    var nickname = $('#nicknameinput').val();
+
+    if (nickname != "" && nickname.length <= 8) {
         $("#usernickname").hide();
         $("#displaygame").show();
+
     }
     else {
         $("#nick-error").html("You must enter a nickcname 8 characters or under.")
     }
 
     //   MO Add This - add user to local storage if not already taken username
-    if (!userFound()) {
+    /* if (!userFound()) {
         addLocalStoarge();
         $("#usernickname").hide();
         $("#displaygame").show();
         }
     else {
         $("#nick-error").html("Username already taken.")
-    }
-        // MO save data to firebase Database
-        saveDate();
-        displaySavedData();
+    } */
+    // MO save data to firebase Database
+    /*  saveDate();
+     displaySavedData(); */
 });
 
 // MO Initialize Music Api
@@ -72,36 +73,37 @@ var win = ["happy", "win", "success"];
 var lost = ["sad", "lost", "fail"];
 
 // JavaScript for referencing 2D context in Canvas drawing area
- var canvas = document.getElementById("myCanvas");
- var ctx = canvas.getContext("2d");
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
 
- // loading audio files
+// loading audio files ------------------------------
 
-var endMusic = new Howl({
-    urls: ["sound/music.ogg"],
-    autoplay: false,
-    loop: true
-});
-
-var mute = false;
+// var endMusic = new Howl({
+//     urls: ["sound/music.ogg"],
+//     autoplay: false,
+//     loop: true
+// });
+// var mute = false;
 
 function createAudio(src, options) {
     var audio = document.createElement("audio");
     audio.volume = options.volume || 0.5;
-    audio.loop   = options.loop;
+    audio.loop = options.loop;
     audio.src = src;
     return audio;
 }
-var brickAudio = createAudio("assets/sounds/BEEPPURE.wav", {volume: 0.75});
-var lifeCountAudio = createAudio("assets/sounds/BEEPPURE.wav", {volume: 0.75});
-var youWinAudio = createAudio("assets/sounds/BEEPPURE.wav", {volume: 0.75});
-var youLoseAudio = createAudio("assets/sounds/BEEPPURE.wav", {volume: 0.75});
-var lastPageAudio = createAudio("assets/sounds/BEEPPURE.wav", {volume: 0.75});
+
+var paddleAudio = createAudio("assets/sounds/sraba_bleep-sound.wav", {volume: 0.30});
+var brickAudio = createAudio("assets/sounds/MGF-99-EGLITCH-21.wav", {volume: 0.50});
+var lifeCountAudio = createAudio("assets/sounds/MGF-99-AJVHS-08.wav", {volume: 0.08});
+var youWinAudio = createAudio("assets/sounds/bertrof-game-sfx-correct.wav", {volume: 0.20});
+var youLoseAudio = createAudio("assets/sounds/wrong-buzzer.wav", {volume: 0.05});
+var lastPageAudio = createAudio("assets/sounds/music.ogg", {volume: 0.75});
 
 function playSound(sound) {
     sound.play();
 }
- 
+
 // DECLARING GLOBAL VARIABLES ---------------
 
 var good = false;
@@ -146,7 +148,7 @@ var rightPressed = false;   // intialized Arrow Key states for PADDLE & WALL col
 var leftPressed = false;
 
 
-const brickRowCount = 4;
+const brickRowCount = 3;
 const brickColumnCount = 6;
 const brickWidth = 115;
 const brickHeight = 26;
@@ -154,9 +156,9 @@ const brickPadding = 12;
 const brickOffsetTop = 30;
 const brickOffsetLeft = 12;
 
-const regularColor = "rgba(150, 150, 150, 45%)";
-const doubleHitColor = "red";
-const singleHitColor = "yellow";
+const regularColor = "#546e7a";
+const doubleHitColor = "#d50000";
+const singleHitColor = "#e65100";
 
 var brickColors = [regularColor, regularColor, doubleHitColor, singleHitColor];
 
@@ -239,7 +241,7 @@ function drawBorder() {
     ctx.rect(0, 0, horizBorderWidthLeft, horizBorderHeight);
     // right horiz border
     ctx.rect(canvas.width - horizBorderWidthRight, 0, horizBorderWidthRight, horizBorderHeight);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "rgb(0, 0, 0)";
     ctx.fill();
     ctx.closePath();
 }
@@ -251,7 +253,7 @@ function drawBall() {
     ctx.rect(x - ballRadius / 2, y + ballRadius / 2, ballRadius, ballRadius / 2);
     ctx.rect(x - ballRadius, y - ballRadius / 2, ballRadius / 2, ballRadius);
     ctx.rect(x + ballRadius / 2, y - ballRadius / 2, ballRadius / 2, ballRadius);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#01579b";
     ctx.fill();
     ctx.closePath();
 }
@@ -259,18 +261,18 @@ function drawBall() {
 function drawPaddle() {
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#01579b";
     ctx.fill();
     ctx.closePath();
 }
 
 
 function displayStartScreen() {
-    ctx.beginPath();
-    ctx.rect((canvas.width - startMsgWidth) / 2, (canvas.height - startMsgHeight) / 2, startMsgWidth, startMsgHeight);
-    ctx.fillStyle = "red";
-    ctx.fill();
-    ctx.closePath();
+    // ctx.beginPath();
+    // ctx.rect((canvas.width - startMsgWidth) / 2, (canvas.height - startMsgHeight) / 2, startMsgWidth, startMsgHeight);
+    // ctx.fillStyle = "red";
+    // ctx.fill();
+    // ctx.closePath();
 
     ctx.beginPath();
     ctx.font = "100px pixelated";
@@ -292,14 +294,22 @@ function displayStartScreen() {
 }
 
 function displayYouWin() {
-    $("#over").css("display","none");
-        $("#displaygame").css("display","none");
-        $("#gameover").css("display", "contents"); 
+    clearInterval(interval);
+    $("#over").css("display", "none");
+    $("#displaygame").css("display", "none");
+    $("#gameover").css("display", "contents");
     // gameInitialize()
-    bad=true;
-    if(good){
+    bad = true;
+    if (good) {
         console.log(good);
-        $("#congratulation").css("display","contents");}
+        $("#congratulation").css("display", "contents");
+    }
+    // save data 
+    if (!userFound()) {
+        addLocalStoarge();
+    }
+    saveDate();
+    displaySavedData();
     // MO display gif
     var searchGif = get_random(win);
     displayGif(searchGif);
@@ -307,16 +317,24 @@ function displayYouWin() {
     // window.setTimeout(playSound(youWinAudio), 50);
 }
 
-function displayYouLose() {    
-    good=true
+function displayYouLose() {
+    clearInterval(interval);
+    good = true
     console.log(good);
-  $("#congratulation").css("display","none");
-   $("#displaygame").css("display","none");
-   $("#gameover").css("display", "contents");
-   if(bad){
-      console.log(bad);
-      $("#over").css("display","contents");}
-      var searchGif = get_random(lost);
+    $("#congratulation").css("display", "none");
+    $("#displaygame").css("display", "none");
+    $("#gameover").css("display", "contents");
+    if (bad) {
+        console.log(bad);
+        $("#over").css("display", "contents");
+    }
+    // save data 
+    if (!userFound()) {
+        addLocalStoarge();
+    }
+    saveDate();
+    displaySavedData();
+    var searchGif = get_random(lost);
     displayGif(searchGif);
 }
 
@@ -344,6 +362,7 @@ function gameInitialize() {
         drawBorder();
         drawPaddle();
         displayStartScreen();
+        displayHigh();
     }
     else {
         //start timer
@@ -425,7 +444,7 @@ function playGame() {
     else if (y + dy < horizBorderHeight + ballRadius / 2 && dy < 0) {
         dy = -dy;
     }
-    
+
     // detect ball collision with PADDLE
     if (x > paddleX && x < paddleX + paddleWidth) {
         if (y + dy > canvas.height - paddleHeight - ballRadius / 4 && dy > 0) {
@@ -472,7 +491,7 @@ function playGame() {
     else if (leftPressed && paddleX > 0) {
         paddleX -= paddleDx;
     }
-    
+
     requestAnimationFrame(playGame);
 }
 
@@ -586,10 +605,10 @@ function userFound() {
             if (logonStorage[i + 1] >= score) {
                 localStorage.clear('users');
                 addLocalStoarge()
-                $("#high-scores").text(score)
+                $("#display-score").text(score)
             }
-            else{
-                $("#high-scores").text(logonStorage[i + 1])
+            else {
+                $("display-score").text(logonStorage[i + 1])
             }
             return true;
         }
@@ -603,6 +622,7 @@ function saveDate() {
     var player = $("#nicknameinput").val().trim();
     var score = $("#timer").text();
     var newscore = parseInt(score);
+    console.log(player + newscore + score)
     var newResultRef = resultRef.push();
     var d = new Date();
     newResultRef.set({
@@ -611,8 +631,7 @@ function saveDate() {
         currtime: d.toLocaleString()
 
     })
-    $("#display-score").text(score);
-    
+    $("#display-score").append(score);
 }
 
 // MO function To Call Giffy API 
@@ -632,14 +651,12 @@ function displayGif(searchGif) {
             animalImage.addClass("img-thumbnail");
             $("#gif").append(animalImage)
         })
-
     });
 }
 
 // MO Random Function
 function get_random(list) {
     return list[Math.floor((Math.random() * list.length))];
-
 }
 
 // MO Music Fuctions
@@ -650,9 +667,11 @@ function onPlayerStateChange(event) {
         console.log(event);
     }
 }
+
 function stopVideo() {
     player.stopVideo();
 }
+
 function onPlayerReady(event) {
     console.log(event.target);
 }
@@ -663,7 +682,6 @@ function playVideo() {
 
 function get_random(list) {
     return list[Math.floor((Math.random() * list.length))];
-
 }
 
 // MO timer function 
@@ -680,36 +698,53 @@ function timerFunc() {
 
 
 // MO function retrive data from firebase database
- function displaySavedData() {
-   
-    firebase.database().ref('gameResult').orderByChild("score").limitToFirst(5).on('child_added', function (childSnapshot){
+function displaySavedData() {
 
-    var childKey = childSnapshot.key;
-    var childData = childSnapshot.val();
-  
-    var player = childData.player;
-    var score = childSnapshot.val().score;
-     $("#data-table > tbody").append("<tr><td>" + player + "</td><td>" + score + "</td><td>" );
+    firebase.database().ref('gameResult').orderByChild("score").limitToFirst(5).on('child_added', function (childSnapshot) {
 
+        var childKey = childSnapshot.key;
+        var childData = childSnapshot.val();
+
+        var player = childData.player;
+        var score = childData.score;
+
+        $(".list-group").append("<span>" + player + "</span>" + "<span>" + score + "</span>" + "<br>")
+        $("#data-table > tbody").append("<tr><td>" + player + "</td><td>" + score + "</td><td>");
+    });
+}
+
+function displayHigh() {
+    $("#highscores").text("High Scores:");
+    var logonStorage = JSON.parse(localStorage.getItem('users'));
+    if (logonStorage === null) {
+        return false;
+    }
+    else {
+        for (var i = 0; i < logonStorage.length; i++) {
+
+
+            $("#highscores").append(logonStorage[i + 1]);
+            $("#hi-score").append(logonStorage[i + 1]);
+        }
+
+    }
+}
+
+
+$('#Restart').click(function () {
+    location.reload();
 });
 
-} 
-
-
-$('#Restart').click(function() {
-    location.reload();
- });
- 
- $('#Replay').click(function() {
+$('#Replay').click(function () {
     console.log(startScreen);
     $("#gameover").hide();
     $("#displaygame").show();
     startScreen = true;
     lives = 3;
     gameInitialize();
- });
+});
 
- // MO play music
+// MO play music
 $('#music-controls').change(function () {
 
     if (this.checked) {
@@ -718,7 +753,7 @@ $('#music-controls').change(function () {
         stopVideo()
     }
 });
- 
+
 
 
 // function playGame() {

@@ -1,5 +1,12 @@
+@font-face {
+    font-family: pixelated;
+    src: url("/fonts/pixelated.ttf");
+}
+
 body {
     text-align: center;
+    /* Materialize CSS color -- orange darken-1 */
+    background-color: #fb8c00;
 }
 
 #game-over {
@@ -19,6 +26,20 @@ body {
     color: red;
 }
 
+h1 {
+    font-family: pixelated, Arial, sans-serif;
+}
 
-/* $("#game-over").hide();
-.show(); include in JS file*/
+#frontheader {
+    font-size: 400px;
+    letter-spacing: -15px;
+}
+
+#frontheaderX {
+    font-size: 520px;
+    letter-spacing: -15px;
+}
+
+#frontpage {
+    margin: 120px;
+}

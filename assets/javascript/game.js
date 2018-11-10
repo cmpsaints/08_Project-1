@@ -1,3 +1,17 @@
+// MO Configure and Initialize Database 
+var config = {
+    apiKey: "AIzaSyAXHWAAt4ZCoivRhnu0140RJYcB7eD-KCE",
+    authDomain: "game-project-e5caa.firebaseapp.com",
+    databaseURL: "https://game-project-e5caa.firebaseio.com",
+    projectId: "game-project-e5caa",
+    storageBucket: "",
+    messagingSenderId: "116338671963"
+};
+
+firebase.initializeApp(config);
+database = firebase.database();
+var resultRef = database.ref("gameResult");
+
 $(document).ready(function(){
     $("#displaygame").hide();
     $("#gameover").hide();
@@ -15,7 +29,35 @@ $("#submitmodal").click(function(){
         $("#nick-error").html("You must enter a nickcname 8 characters or under.")
     }
 });
-    
+
+// MO Initialize Music Api
+var tag = document.createElement('script');
+var muteAudio = document.getElementById('player');
+
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+var list = ["vNZnKsB9pVs", "zyluU2OpqDA", "QwdbFNGCkLw"];
+var videoIdValue = get_random(list);
+var player;
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+        height: '50',
+        width: '100',
+        videoId: videoIdValue,
+        playerVars: '',
+        events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+        }
+    });
+}
+var done = false;
+
+// MO declare array for gif values
+var win = ["happy", "win", "success"];
+var lost = ["sad", "lost", "fail"];
+
 // JavaScript for referencing 2D context in Canvas drawing area
  var canvas = document.getElementById("myCanvas");
  var ctx = canvas.getContext("2d");

@@ -1,3 +1,17 @@
+// MO Configure and Initialize Database 
+var config = {
+    apiKey: "AIzaSyAXHWAAt4ZCoivRhnu0140RJYcB7eD-KCE",
+    authDomain: "game-project-e5caa.firebaseapp.com",
+    databaseURL: "https://game-project-e5caa.firebaseio.com",
+    projectId: "game-project-e5caa",
+    storageBucket: "",
+    messagingSenderId: "116338671963"
+};
+
+firebase.initializeApp(config);
+database = firebase.database();
+var resultRef = database.ref("gameResult");
+
 $(document).ready(function(){
     $("#displaygame").hide();
     $("#gameover").hide();
@@ -14,8 +28,49 @@ $("#submitmodal").click(function(){
     else {
         $("#nick-error").html("You must enter a nickcname 8 characters or under.")
     }
+
+    //   MO Add This - add user to local storage if not already taken username
+    if (!userFound()) {
+        addLocalStoarge();
+        $("#usernickname").hide();
+        $("#displaygame").show();
+        }
+    else {
+        $("#nick-error").html("Username already taken.")
+    }
+        // MO save data to firebase Database
+        saveDate();
+        displaySavedData();
 });
-    
+
+// MO Initialize Music Api
+var tag = document.createElement('script');
+var muteAudio = document.getElementById('player');
+
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+var list = ["vNZnKsB9pVs", "zyluU2OpqDA", "QwdbFNGCkLw"];
+var videoIdValue = get_random(list);
+var player;
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+        height: '50',
+        width: '100',
+        videoId: videoIdValue,
+        playerVars: '',
+        events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+        }
+    });
+}
+var done = false;
+
+// MO declare array for gif values
+var win = ["happy", "win", "success"];
+var lost = ["sad", "lost", "fail"];
+
 // JavaScript for referencing 2D context in Canvas drawing area
  var canvas = document.getElementById("myCanvas");
  var ctx = canvas.getContext("2d");
@@ -48,6 +103,9 @@ function playSound(sound) {
 }
  
 // DECLARING GLOBAL VARIABLES ---------------
+
+var good = false;
+var bad = false;
 
 const startMsgWidth = canvas.width / 2;
 const startMsgHeight = canvas.height / 4;
@@ -234,35 +292,32 @@ function displayStartScreen() {
 }
 
 function displayYouWin() {
-    ctx.beginPath();
-    ctx.rect((canvas.width - startMsgWidth) / 2, (canvas.height - startMsgHeight) / 2, startMsgWidth, startMsgHeight);
-    ctx.fillStyle = "red";
-    ctx.fill();
-    ctx.closePath();
-
-    ctx.beginPath();
-    ctx.font = "80px pixelated";
-    ctx.fillStyle = "black";
-    ctx.fillText("YOU WIN", canvas.width / 2 - 74, canvas.height / 2 - 20);
-    ctx.closePath();
-    
-    window.setTimeout(playSound(youWinAudio), 50);
+    $("#over").css("display","none");
+        $("#displaygame").css("display","none");
+        $("#gameover").css("display", "contents"); 
+    // gameInitialize()
+    bad=true;
+    if(good){
+        console.log(good);
+        $("#congratulation").css("display","contents");}
+    // MO display gif
+    var searchGif = get_random(win);
+    displayGif(searchGif);
+    // MO End Of Adding
+    // window.setTimeout(playSound(youWinAudio), 50);
 }
 
 function displayYouLose() {    
-    ctx.beginPath();
-    ctx.rect((canvas.width - startMsgWidth) / 2, (canvas.height - startMsgHeight) / 2, startMsgWidth, startMsgHeight);
-    ctx.fillStyle = "red";
-    ctx.fill();
-    ctx.closePath();
-
-    ctx.beginPath();
-    ctx.font = "80px pixelated";
-    ctx.fillStyle = "black";
-    ctx.fillText("YOU LOSE", canvas.width / 2 - 78, canvas.height / 2);
-    ctx.closePath();
-
-    window.setTimeout(playSound(youLoseAudio), 600);
+    good=true
+    console.log(good);
+  $("#congratulation").css("display","none");
+   $("#displaygame").css("display","none");
+   $("#gameover").css("display", "contents");
+   if(bad){
+      console.log(bad);
+      $("#over").css("display","contents");}
+      var searchGif = get_random(lost);
+    displayGif(searchGif);
 }
 
 // function displayGameOver() {
@@ -501,6 +556,144 @@ function redraw() {
     window.setTimeout(playGame, 800);
 }
 
+function addLocalStoarge() {
+    var player = $("#nicknameinput").val().trim();
+    var score = $("#timer").text();
+    if (localStorage.getItem('users')) {
+        logon = JSON.parse(localStorage.getItem('users'));
+    } else {
+        logon = [];
+    }
+    logon.push(player);
+    logon.push(score);
+    localStorage.setItem("users", JSON.stringify(logon));
+}
+
+// MO check if data saved to local storage
+
+function userFound() {
+    var player = $("#nicknameinput").val().trim();
+    var score = $("#timer").text();
+    var logonStorage = JSON.parse(localStorage.getItem('users'));
+    if (logonStorage === null) {
+        return false;
+    }
+    else {
+        for (var i = 0; i < logonStorage.length; i++) {
+
+            if (logonStorage[i + 1] >= score) {
+                localStorage.clear('users');
+                addLocalStoarge()
+                $("#high-scores").text(score)
+            }
+            else{
+                $("#high-scores").text(logonStorage[i + 1])
+            }
+            return true;
+        }
+    }
+}
+
+// MO function To Save Data To Firebase Database
+
+function saveDate() {
+    console.log("here")
+    var player = $("#nicknameinput").val().trim();
+    var score = $("#timer").text();
+    var newscore = parseInt(score);
+    var newResultRef = resultRef.push();
+    var d = new Date();
+    newResultRef.set({
+        player: player,
+        score: newscore,
+        currtime: d.toLocaleString()
+
+    })
+    $("#display-score").text(score);
+    
+}
+
+// MO function To Call Giffy API 
+
+function displayGif(searchGif) {
+    $("#gif").empty();
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+        searchGif + "&api_key=dc6zaTOxFJmzC&limit=1";
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    }).then(function (response) {
+        response.data.forEach(function (gif) {
+            var imageDiv = $("<div>");
+            var animalImage = $("<img>").attr("src", gif.images.fixed_height.url);
+            animalImage.addClass("img-responsive");
+            animalImage.addClass("img-thumbnail");
+            $("#gif").append(animalImage)
+        })
+
+    });
+}
+
+// MO Random Function
+function get_random(list) {
+    return list[Math.floor((Math.random() * list.length))];
+
+}
+
+// MO Music Fuctions
+function onPlayerStateChange(event) {
+    if (event.data == YT.PlayerState.PLAYING && !done) {
+        //  setTimeout(stopVideo, 60000;
+        done = true;
+        console.log(event);
+    }
+}
+function stopVideo() {
+    player.stopVideo();
+}
+function onPlayerReady(event) {
+    console.log(event.target);
+}
+
+function playVideo() {
+    player.playVideo();
+}
+
+function get_random(list) {
+    return list[Math.floor((Math.random() * list.length))];
+
+}
+
+// MO timer function 
+function timerFunc() {
+    $("#timer").text("");
+    var counter = 0;
+    function timeIt() {
+
+        $("#timer").text(counter);
+        counter++;
+    }
+    interval = setInterval(timeIt, 1000);
+}
+
+
+// MO function retrive data from firebase database
+ function displaySavedData() {
+   
+    firebase.database().ref('gameResult').orderByChild("score").limitToFirst(5).on('child_added', function (childSnapshot){
+
+    var childKey = childSnapshot.key;
+    var childData = childSnapshot.val();
+  
+    var player = childData.player;
+    var score = childSnapshot.val().score;
+     $("#data-table > tbody").append("<tr><td>" + player + "</td><td>" + score + "</td><td>" );
+
+});
+
+} 
+
+
 $('#Restart').click(function() {
     location.reload();
  });
@@ -510,8 +703,20 @@ $('#Restart').click(function() {
     $("#gameover").hide();
     $("#displaygame").show();
     startScreen = true;
+    lives = 3;
     gameInitialize();
  });
+
+ // MO play music
+$('#music-controls').change(function () {
+
+    if (this.checked) {
+        playVideo();
+    } else {
+        stopVideo()
+    }
+});
+ 
 
 
 // function playGame() {

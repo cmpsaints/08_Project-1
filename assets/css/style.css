@@ -2,13 +2,23 @@ body {
     text-align: center;
 }
 
-/* #game-over {
+#game-over {
     display: none;
-} */
+}
 
 .list-group-item {
     display: list-item;
 }
 
-/* $("#game-over").hide(); 
+#submit-button {
+  position: center;
+}
+
+#nick-error {
+    font-weight: bold;
+    color: red;
+}
+
+
+/* $("#game-over").hide();
 .show(); include in JS file*/

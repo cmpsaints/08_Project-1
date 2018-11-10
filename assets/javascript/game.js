@@ -346,6 +346,8 @@ function gameInitialize() {
         displayStartScreen();
     }
     else {
+        //start timer
+        timerFunc();
         // random initial direction of GOAL opening
         var initializeDirec = Math.floor(Math.random() * 2);
         if (initializeDirec === 0) {

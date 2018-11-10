@@ -1,95 +1,134 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-   <meta charset="utf-8" />
-   <title>briX</title>
-   <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-   <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-   <link rel="preload" href="assets/fonts/pixelated.ttf" as="font">
-   <title>Gamedev Canvas Workshop</title>
-   <style>
-       * { padding: 0; margin: 0; }
-       canvas { background: #eee; display: block; margin: 0 auto; }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gamedev Canvas Workshop: briX</title>
+
+  <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+  <link rel="preload" href="assets/fonts/pixelated.ttf" as="font">
+
+  <style type="text/css">
+    * { padding: 0; margin: 0; }
+      canvas { background: #f57c00; margin: 0 auto; }
+
+      @font-face {
+    font-family: pixelated;
+    src: url"("/fonts/pixelated.ttf");
+}
    </style>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
+
+
 <body>
+  <!-- <header>
+      <h1><span id="frontheader">bri</span><span id="frontheaderX">X</span></h1>
+  </header> -->
 
-   <header>
-       <h1> briX </h1>
-   </header>
+  <div class="container">
+    <!-- MO Sound Div Hidden-->
+    <div class="row" id="frontpage">
+      <div id="player" style="display:none"></div>
+    </div>
+    <!--<div id="modal1" class="modal"> -->
+    <div class="row" id="usernickname">
+      <div class="modal-content">
+        <h1><span id="frontheader">bri</span><span id="frontheaderX">X</span></h1>
+        <div class="row">
+          <div class="col s6"></div>
+          <div class="col s4"><h6>play briX</h6></div>
+        </div>
+        <p id="nick-error"> </p>
 
-   <!-- MO Sound Div Hidden-->
- <div id="player" style="display:none"></div>
-
-      <!--<div id="modal1" class="modal"> -->
-      <section id="usernickname">
-        <div class="modal-content">
-            <h4>Welcome to briX!</h4>
-            <h5>Create a nickname:</h5>
-            <p id = "nick-error"> </p>
-          <div class="row">
-            <form class="col s12">
-              <div class="row">
-                <div class="input-field col s12">
-                  <input id="nicknameinput" type="text" class="validate">
-                  <label for="nicknameinput">Nickname</label>
-                </div>
-              </div>       
-                       
-            </form>
+        <div class="row">
+          <div class="col s4">
+          </div>
+          <form class="col s4">
+            <!-- <div class="row"> -->
+              <div class="input-field">
+                <input id="nicknameinput" type="text" class="validate">
+                <label for="nicknameinput" class="cyan-text text-darken-3">create a nick</label>
+              </div>
+            <!-- </div> -->
+          </form>
+          <div class="col s4">
           </div>
         </div>
-        <div class="modal-footer">
-          <a class=" modal-action modal-close waves-effect waves-green btn-flat" id="submitmodal">Submit</a>
-        </div>
+
+      </div>
+      <div class="modal-footer">
+        <a class="modal-action modal-close cyan-text text-darken-3 btn-flat" id="submitmodal">Submit</a>
+      </div>
+    </div>
+  </div>
+
+  <section id="displaygame">
     
-    </section>
-     
-
-<section id="displaygame">
-   <div id = "timer"> Time: </div>
-   <canvas id="myCanvas" width="778" height="580"></canvas>
-   <div id = "hi-score"> High Score </div>
+    <div id="timer"> Time: </div>
+    <canvas id="myCanvas" width="778" height="580"></canvas>
+    <div id="hi-score"> Fastest Time </div>
 
 
-   <div id = "instructions"> Instructions: Use left and right arrow keys to move paddle. </div>
-   <form action="#">
+    <!-- <div id="instructions"> Instructions: Use left and right arrow keys to move paddle. </div> -->
+    <form action="#">
       <p>
         <label>
-          <input type="checkbox" id="music-controls"/>
-           <span>Play Music</span>
+          <input type="checkbox" id="music-controls" />
+          <span>Play Music</span>
         </label>
       </p>
-   </form>
-</section>
+    </form>
+  </section>
 
-<section id="gameover">
+  <section id="gameover">
     <h1 id="over"> GAME OVER </h1>
-    <h1 id="congratulation">Congratulation Good Job</h1>
-    <div id = "gif"> </div> <!--GIF-->
-    <div id = "display-score"> Your Score: </div>
-    <div id = "highscores"> High Scores:
-        <ol class = "list-group">
-            <li class="list-group-item"> Name,<span>Mingming</span> Score<span>34</span> </li>
+    <h1 id="congratulation">CONGRATS!</h1>
+    <div id="gif"> </div>
+    <!--GIF-->
+    <div id="display-score"> Your Time: </div>
+    <div id="highscores"> Fastest Times: </div>
+
+      <table class="table table-hover centered" id='data-table'>
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Time</th>
+
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <!-- <ol class = "list-group">
+             <li class="list-group-item"> Name,<span>Mingming</span> Score<span>34</span> </li>
             <li class="list-group-item"> Name,<span>Mo</span> Score<span>23</span> </li>
             <li class="list-group-item"> Name,<span>Ming2</span> Score <span>20</span></li>
             <li class="list-group-item"> Name,<span>Jay</span> Score <span>15</span></li>
-            <li class="list-group-item"> Name,<span>Valery</span> Score<span> 14</span> </li>
-        </ol>
+            <li class="list-group-item"> Name,<span>Valery</span> Score<span> 14</span> </li> 
+        </ol> -->
     </div>
-    <button id = "Replay" > Replay </button>
-    <button id = "Restart"> Restart </button>
+    <button id="Replay">Replay</button>
+    <button id="Restart">Restart</button>
   </section>
 
-  <!-- JS library, used in implementing audio looping-->
-  
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>  
+  <!-------------------------------------------------->
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <!-- MO Script To Initilaize Firebase-->
+
+  <!-- MO Script To Initilaize Firebase-->
   <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase.js"></script>
-  <script type="text/javascript" src="assets/javascript/howler.js"></script>
+
+  <!-- JS library, used in implementing audio looping-->
+  <!-- <script type="text/javascript" src="assets/javascript/howler.js"></script> -->
+
   <script src="assets/javascript/game.js "></script>
+
 </body>
 </html>

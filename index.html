@@ -6,13 +6,12 @@
    <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+   <link rel="preload" href="assets/fonts/pixelated.ttf" as="font">
    <title>Gamedev Canvas Workshop</title>
    <style>
        * { padding: 0; margin: 0; }
        canvas { background: #eee; display: block; margin: 0 auto; }
    </style>
- <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>  
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -48,7 +47,7 @@
 
 <section id="displaygame">
    <div id = "timer"> Time: </div>
-   <canvas id="myCanvas" width="900" height="500"></canvas>
+   <canvas id="myCanvas" width="778" height="580"></canvas>
    <div id = "hi-score"> High Score </div>
 
 
@@ -78,10 +77,13 @@
        </div>
        <button id = "Replay" > Replay </button>
        <button id = "Restart"> Restart </button>
+  </section>
 
-</section>
-
-<script src="assets/javascript/game.js "></script>
-<!-- <script src="component-2.js "></script> -->
+  <!-- JS library, used in implementing audio looping-->
+  
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script type="text/javascript" src="assets/javascript/howler.js"></script>
+  <script src="assets/javascript/game.js "></script>
 </body>
 </html>
